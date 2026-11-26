@@ -443,9 +443,8 @@ public class PlaybackHostActivity extends Activity implements SurfaceHolder.Call
     private String speedLabel(float speed){return String.format(Locale.US,"%.2f",speed).replaceAll("0$","")+"x";}
     private void refreshMenu(){
         if(glassMenu==null)return;
-        menuSpeed.sub(speedLabel(playbackSpeed)+(speedLocked?" · 锁定":""));
+        menuSpeed.sub(speedLabel(playbackSpeed)+(speedLocked?" 锁":""));   // 长条胶囊一行放得下
         menuQuality.sub(prepared && activeGear!=null?activeGear.shortSide()+"P":prefer==null?"720P":prefer.toUpperCase(Locale.US));
-        menuDanmaku.toggle(ink.pengfei.lvguo.ui.widget.DanmakuView.enabled());
         boolean fav=seriesId!=null && Store.isFavorite(seriesId);
         menuFavorite.title(fav?"已收藏":"收藏").filled(fav).current(fav);
     }
@@ -475,15 +474,8 @@ public class PlaybackHostActivity extends Activity implements SurfaceHolder.Call
         }
         refreshMenu();
     }
-    /** 菜单「弹幕」：关着时先打开，再弹出弹幕设置（开关 / 滚动速度 / 文字大小 / 不透明度）。 */
+    /** 菜单「弹幕」：直接进弹幕设置（开关 / 滚动速度 / 文字大小 / 不透明度都在里面），菜单上不再显示开关。 */
     private void menuDanmaku(){
-        if(!ink.pengfei.lvguo.ui.widget.DanmakuView.enabled()){
-            App.prefs().edit().putBoolean("dm_on",true).apply();
-            if(danmaku!=null)danmaku.applySettings();
-            bulletVid=null;if(episodes!=null && index>=0 && index<episodes.size())loadDanmaku(sequence,episodes.get(index));
-            if(danmakuButton!=null)danmakuButton.setText("弹幕");
-            refreshMenu();
-        }
         openDanmaku();
     }
     /** 菜单「选集」：进入这部剧的详情页。 */

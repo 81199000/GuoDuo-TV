@@ -17,32 +17,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 果多右侧「液态玻璃」菜单：图标 + 文字（可带副标题 / 开关），遥控器上下选择、确定执行。
+ * 果多右侧「液态玻璃」竖长条胶囊菜单：每项图标在上、一行小字在下（有当前值就显示值，如 1.0x / 1080P，
+ * 没有就显示名称），遥控器上下选择、确定执行。外形两头全圆，选中项是圆角白底高亮。
  * 不抢 Android 焦点（页面原来的焦点保持不动），5 秒无操作自动收起。
  */
 public final class GlassMenu extends LinearLayout {
     public static final long AUTO_HIDE_MS = 5000;
-    public static final int WIDTH_DP = 188;
+    /** 竖长条胶囊宽度：图标在上、一行小字在下（老板给的参考图样式）。 */
+    public static final int WIDTH_DP = 84;
     /** 子面板（倍速 / 弹幕设置…）开着时返回 true：期间不自动收起。 */
     public interface Hold { boolean active(); }
 
     public final class Item {
         final LinearLayout row; final IconView icon; final TextView title, sub; final Toggle toggle;
         final Runnable action; boolean current;
-        Item(LinearLayout row, IconView icon, TextView title, TextView sub, Toggle toggle, Runnable action) {
+        String titleText, subText = "";
+        Item(LinearLayout row, IconView icon, TextView title, TextView sub, Toggle toggle, Runnable action, String text) {
             this.row = row; this.icon = icon; this.title = title; this.sub = sub; this.toggle = toggle; this.action = action;
+            this.titleText = text;
         }
-        public Item title(String s) { title.setText(s); return this; }
-        public Item sub(String s) {
-            sub.setText(s == null ? "" : s);
-            sub.setVisibility(s == null || s.isEmpty() ? GONE : VISIBLE);
-            return this;
-        }
-        public Item toggle(Boolean on) {
-            toggle.setVisibility(on == null ? GONE : VISIBLE);
-            if (on != null) toggle.setOn(on);
-            return this;
-        }
+        /** 图标下面那行字：有当前值（倍速 / 画质）显示值，否则显示名称。 */
+        private void label() { title.setText(subText.isEmpty() ? titleText : subText); }
+        public Item title(String s) { titleText = s == null ? "" : s; label(); return this; }
+        public Item sub(String s) { subText = s == null ? "" : s; label(); return this; }
+        public Item toggle(Boolean on) { if (on != null) toggle.setOn(on); return this; }   // 长条胶囊里不显示开关
         public Item filled(boolean f) { icon.setFilled(f); return this; }
         public Item current(boolean c) { current = c; paint(); return this; }
     }
@@ -62,8 +60,8 @@ public final class GlassMenu extends LinearLayout {
     public GlassMenu(Context c) {
         super(c);
         setOrientation(VERTICAL);
-        setBackground(Ui.liquidGlass(c, 22));
-        Ui.padding(this, 8, 8, 8, 8);
+        setBackground(Ui.liquidGlass(c, WIDTH_DP / 2f));   // 圆角 = 半宽 → 两头全圆的长条胶囊
+        Ui.padding(this, 7, 18, 7, 18);
         setVisibility(GONE);
         setClickable(true);
         setFocusable(false);
@@ -73,35 +71,27 @@ public final class GlassMenu extends LinearLayout {
 
     public Item add(int iconType, String text, Runnable action) {
         Context c = getContext();
-        if (!items.isEmpty()) {
-            View line = new View(c);
-            line.setBackgroundColor(0x1FFFFFFF);
-            LayoutParams ll = new LayoutParams(-1, Math.max(1, dp(.5f)));
-            ll.leftMargin = dp(12); ll.rightMargin = dp(12);
-            addView(line, ll);
-        }
-        LinearLayout row = Ui.row(c);
-        Ui.padding(row, 14, 0, 12, 0);
-        IconView icon = new IconView(c, iconType, 22);
-        row.addView(icon, Ui.lp(dp(22), dp(22)));
-        LinearLayout texts = Ui.column(c);
-        TextView t = Ui.text(c, text, 16, 0xFFFFFFFF, true);
+        LinearLayout row = Ui.column(c);
+        row.setGravity(android.view.Gravity.CENTER);
+        Ui.padding(row, 0, 9, 0, 8);
+        IconView icon = new IconView(c, iconType, 28);
+        row.addView(icon, Ui.lp(dp(28), dp(28)));
+        TextView t = Ui.text(c, text, 12, 0xD9FFFFFF, false);
         t.setSingleLine(true);
-        TextView s = Ui.text(c, "", 11, 0x99FFFFFF, false);
-        s.setSingleLine(true);
+        t.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        t.setGravity(android.view.Gravity.CENTER);
+        LayoutParams tl = Ui.lp(-1, -2); tl.topMargin = dp(5);
+        row.addView(t, tl);
+        TextView s = Ui.text(c, "", 11, 0x99FFFFFF, false);   // 留着兼容旧接口，不显示
         s.setVisibility(GONE);
-        texts.addView(t, Ui.lp(-2, -2));
-        LayoutParams sl = Ui.lp(-2, -2); sl.topMargin = dp(3);
-        texts.addView(s, sl);
-        LayoutParams tl = Ui.lp(0, -2, 1); tl.leftMargin = dp(14);
-        row.addView(texts, tl);
-        Toggle tg = new Toggle(c);
+        Toggle tg = new Toggle(c);                              // 同上：菜单上不再显示开关
         tg.setVisibility(GONE);
-        row.addView(tg, Ui.lp(dp(32), dp(18)));
         final int idx = items.size();
-        Item it = new Item(row, icon, t, s, tg, action);
+        Item it = new Item(row, icon, t, s, tg, action, text);
         row.setOnClickListener(v -> { selected = idx; paint(); poke(); fire(idx); });
-        addView(row, Ui.lp(-1, dp(54)));
+        LayoutParams rl = Ui.lp(-1, -2);
+        if (!items.isEmpty()) rl.topMargin = dp(6);
+        addView(row, rl);
         items.add(it);
         paint();
         return it;
@@ -183,11 +173,10 @@ public final class GlassMenu extends LinearLayout {
         for (int i = 0; i < items.size(); i++) {
             Item it = items.get(i);
             boolean sel = i == selected;
-            it.row.setBackground(sel ? Ui.round(c, 0xF2F5F5F7, 14) : null);
+            it.row.setBackground(sel ? Ui.round(c, 0xF2F5F5F7, 22) : null);   // 选中：圆角白底
             int fg = sel ? 0xFF111113 : it.current ? Ui.ACCENT_TEXT : 0xFFFFFFFF;
             it.icon.setColor(fg);
-            it.title.setTextColor(fg);
-            it.sub.setTextColor(sel ? 0x99111113 : 0x99FFFFFF);
+            it.title.setTextColor(sel ? 0xCC111113 : it.current ? Ui.ACCENT_TEXT : 0xD9FFFFFF);
         }
     }
 
