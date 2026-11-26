@@ -205,11 +205,9 @@ adb logcat -s TVPlayback HeroPreview TVCompanion   # 播放 / 首页预告 / 手
 - `tv-playback-module/`：播放签名模块（Kotlin）
 - `web/`：桌面网页版（Go），沿用上游，没有重做
 
-## 发版（维护者）
+## 发版
 
-1. 改动全部提交并推送。
-2. 运行 `scripts/release_tv.sh <版本> <versionCode> "<更新内容>"`：只打包已提交的代码，用正式签名出包，上传安装包和更新清单，再从公网下载回来核对 SHA‑256。
-3. 电视端读更新清单，`versionCode` 比本机大就弹更新，所以 **`versionCode` 必须递增**；「更新内容」就是电视上更新弹窗显示的文字。
+正式版（用于自动更新的签名包、上传安装包和更新清单）由维护者在本机完成，发版脚本不在开源仓库里。想自己装，按上面「构建」出调试包即可；新版本见 [oneduo.app](https://oneduo.app)。
 
 ## 免责声明
 
