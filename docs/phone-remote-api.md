@@ -40,4 +40,3 @@ iOS 用 `NWBrowser(for: .bonjour(type: "_guoduo._tcp", domain: nil))`（Info.pli
 - 电视「设置 → 遥控」关掉手机遥控：所有接口 403 `{remoteOff:true}`
 - 强制休息时段：423 `{rest:true}`
 - 设了遥控密码而没授权：401 `{needPassword:true}` → 走一次绑定
-
