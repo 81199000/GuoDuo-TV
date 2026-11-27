@@ -119,7 +119,7 @@ public class RootActivity extends ink.pengfei.lvguo.PlaybackHostActivity {
         // 导航默认收起：启动后把焦点交给内容区（首页数据到达后会再落到第一张卡）。
         mPages[TAB_HOME].focusFirst();
         reportStartupDrawn();
-        // 果多：启动不弹「继续观看」——首页第一行就是继续观看（老板 2026-11-26）
+        // 果多：启动不弹「继续观看」——首页第一行就是继续观看
     }
 
     /** 首页首帧真正上屏时通知启动页；之前已出过画（进程还活着）时 onResume 直接放行。 */

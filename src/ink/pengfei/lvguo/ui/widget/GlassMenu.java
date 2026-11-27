@@ -23,7 +23,7 @@ import java.util.List;
  */
 public final class GlassMenu extends LinearLayout {
     public static final long AUTO_HIDE_MS = 5000;
-    /** 竖长条胶囊宽度：图标在上、一行小字在下（老板给的参考图样式）。 */
+    /** 竖长条胶囊宽度：图标在上、一行小字在下（参考图样式）。 */
     public static final int WIDTH_DP = 84;
     /** 子面板（倍速 / 弹幕设置…）开着时返回 true：期间不自动收起。 */
     public interface Hold { boolean active(); }

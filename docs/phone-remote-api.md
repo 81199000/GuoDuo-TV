@@ -19,7 +19,7 @@ iOS 用 `NWBrowser(for: .bonjour(type: "_guoduo._tcp", domain: nil))`（Info.pli
 
 1. `GET /api/pair/info` → `{app:"guoduo-tv", api:1, id, name, model, version, port, remoteOn, needPassword, bound}`
    （公开信息，不含账号 / 记录）
-2. `POST /api/pair/bind`，body `{"device":"老板的 iPhone","password":"1234"}`（电视没设遥控密码时 password 可省）
+2. `POST /api/pair/bind`，body `{"device":"我的 iPhone","password":"1234"}`（电视没设遥控密码时 password 可省）
    → `{ok:true, token, id, name}`；密码错 403，连错 5 次锁 60 秒（429）
 3. 手机按 `id` 保存 `token`（Keychain）。之后所有请求带 `Authorization: Bearer <token>`。
    电视上改 / 清遥控密码时，所有旧令牌一起失效（再绑一次即可）。

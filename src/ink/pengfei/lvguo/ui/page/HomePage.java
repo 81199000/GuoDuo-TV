@@ -46,7 +46,7 @@ public class HomePage extends Page {
             {"human", "真人剧"}, {"comic_series_rank", "漫剧"}, {"ai_playlet", "AI剧"}, {"series_album", "系列剧"}};
     private static final int PILL_ZONES = 2;
     private static final int ROW_MAX = 20;
-    /** 大海报高度（首页内容区顶部）。分区药丸那一行去掉了（老板 2026-11-26：只留顶部导航一行）。 */
+    /** 大海报高度（首页内容区顶部）。分区药丸那一行去掉了。 */
     private static final int HERO_DP = 236;
     private ink.pengfei.lvguo.ui.widget.HeroBanner hero;
 
