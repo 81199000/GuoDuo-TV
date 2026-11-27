@@ -226,4 +226,3 @@ GuoDuo TV 基于以下上游项目修改，感谢原作者：
 其余第三方组件、依赖及开源许可证见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 与 [third_party/](third_party/)。
 
 本项目以 [GPL-3.0](LICENSE) 协议开源：你可以自由使用、修改和再分发，但衍生作品同样必须以 GPL-3.0 开源。
-
