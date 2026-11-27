@@ -25,4 +25,3 @@ No LibVLC or additional software video decoder is bundled.
 The built-in playback module includes Kotlin signing and request code adapted
 from N3urda/hongguoTV, commit `18c37c2`, licensed GPL-3.0-only:
 https://github.com/N3urda/hongguoTV . Its sources are in `tv-playback-module/`.
-
