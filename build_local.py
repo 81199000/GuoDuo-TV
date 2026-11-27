@@ -69,3 +69,4 @@ for name in output_names:
  (root/'out').mkdir(exist_ok=True)
  shutil.copyfile(b/'lvguo.apk',root/'out'/name)
 print('Version',version_code,'APK ready:',', '.join(str(root/'out'/name) for name in output_names))
+

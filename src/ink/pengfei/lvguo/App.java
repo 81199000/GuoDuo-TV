@@ -124,3 +124,4 @@ public final class App extends Application {
 
     public static SharedPreferences prefs() { return sInst.mPrefs; }
 }
+

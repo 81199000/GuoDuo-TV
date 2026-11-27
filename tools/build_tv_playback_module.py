@@ -18,3 +18,4 @@ with tempfile.TemporaryDirectory(prefix='lvguo-tv-module-') as temp:
  jar=temp/'module.jar';subprocess.run(['jar','cf',str(jar),'-C',str(classes),'.'],check=True)
  subprocess.run(['java','-Xmx512m','-cp',str(d8),'com.android.tools.r8.D8','--min-api','23','--lib',str(android),'--output',str(out),str(jar),stdlib],check=True)
  target=pathlib.Path(os.environ.get('LVGUO_MODULE_OUTPUT','/tmp/lvguo-playback-module.dex'));target.write_bytes((out/'classes.dex').read_bytes());print('Module:',target)
+
